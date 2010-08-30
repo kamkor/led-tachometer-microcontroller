@@ -1,0 +1,65 @@
+﻿<Window x:Class="TachometerLFSClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+        xmlns:local="clr-namespace:TachometerLFSClient"
+        Title="Kamkor Tachometer LFS Client" Height="452" Width="203" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" Closing="Window_Closing" ResizeMode="CanMinimize">
+    <Window.Resources>
+        <Style x:Key="ValidatedCellStyle"  TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self},Path=(Validation.Errors)[0].ErrorContent}"/> 
+                    </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
+    <Grid Height="486" Width="674">        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="287*" />
+            <ColumnDefinition Width="387*" />
+            <ColumnDefinition Width="0" />
+        </Grid.ColumnDefinitions>                      
+                
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="77,12,0,0" Name="carsComboBox" VerticalAlignment="Top" Width="83" SelectionChanged="carsComboBox_SelectionChanged" />
+        <Label Content="Select Car" Height="28" HorizontalAlignment="Left" Margin="12,12,0,0" Name="label1" VerticalAlignment="Top" />
+        <DataGrid AutoGenerateColumns="False" Height="308" HorizontalAlignment="Left" Margin="12,0,0,73" Name="settingsGrid" VerticalAlignment="Bottom" Width="168" ItemsSource="{Binding}" CurrentCellChanged="settingsGrid_CurrentCellChanged" HeadersVisibility="All" GridLinesVisibility="All" AreRowDetailsFrozen="False" EnableRowVirtualization="True" EnableColumnVirtualization="False" FontSize="11" KeyDown="settingsGrid_KeyDown">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="RPM" Width="40" CanUserResize="False" IsReadOnly="False" EditingElementStyle="{StaticResource ValidatedCellStyle}">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="Attribute[Rpm].Value">
+                            <Binding.ValidationRules>
+                                <local:RpmValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Leds" Width="40" EditingElementStyle="{StaticResource ValidatedCellStyle}">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="Attribute[Leds].Value">
+                            <Binding.ValidationRules>
+                                <local:LedsValidationRule/>
+                            </Binding.ValidationRules>                       
+                        </Binding>                                          
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>                
+                <DataGridCheckBoxColumn Header="isOn" Binding="{Binding Path=Attribute[Enabled].Value}" Width="40"></DataGridCheckBoxColumn>
+                <DataGridTemplateColumn Header="Delete" Width="40">
+                    <DataGridTemplateColumn.CellTemplate>                      
+                        <DataTemplate>
+                            <Button Content=" " Name="deleteSetting" Height="14" Width="20" Click="deleteSetting_Click"></Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>                
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="Add Rpm Setting" Height="23" HorizontalAlignment="Left" Margin="12,76,0,0" Name="addSetting" VerticalAlignment="Top" Width="168" Click="addSetting_Click" />
+        <Label Content="Mode" Height="28" HorizontalAlignment="Left" Margin="12,43,0,0" Name="modeLabel" VerticalAlignment="Top" />
+        <RadioButton Content="0" Height="16" HorizontalAlignment="Left" Margin="77,48,0,0" Name="modeZero" VerticalAlignment="Top" IsEnabled="True" IsChecked="False" Checked="modeZero_Checked" />
+        <RadioButton Content="1" Height="16" HorizontalAlignment="Left" Margin="104,48,0,0" Name="modeOne" VerticalAlignment="Top" IsChecked="False" Checked="modeOne_Checked" />
+        <RadioButton Content="2" Height="16" HorizontalAlignment="Right" Margin="0,48,135,0" Name="modeTwo" VerticalAlignment="Top" Checked="modeTwo_Checked" />
+    </Grid>
+</Window>
+
+    
