@@ -250,9 +250,14 @@ namespace TachometerLFSClient
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            saveSettings();
-            tachometer.closeConnection();
+            if (tachometer != null)
+            {
+                saveSettings();
+                tachometer.closeConnection();
+                OutGauge.Close();
+            }
             Application.Current.Shutdown(0);
+           
         }
 
         private void settingsGrid_CurrentCellChanged(object sender, EventArgs e)
